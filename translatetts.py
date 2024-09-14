@@ -77,8 +77,9 @@ class MainWindow(QMainWindow):
         engine.runAndWait()
 
     def swapSrcDest(self):
+        srcPlainText = self.srcText.toPlainText()
         self.srcText.setPlainText(self.destText.toPlainText())
-        self.destText.setPlainText("")
+        self.destText.setPlainText(srcPlainText)
 
         srcCurrentText = self.srcLanguages.currentText()
         self.srcLanguages.setCurrentText(self.destLanguages.currentText())
