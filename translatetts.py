@@ -2,7 +2,8 @@ import sys
 
 import googletrans
 import pyttsx3
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
+                             QCheckBox)
 
 
 class MainWindow(QMainWindow):
@@ -18,8 +19,10 @@ class MainWindow(QMainWindow):
         self.srcSpeak = QPushButton("Speak")
         self.srcLanguages = QComboBox()
 
-        self.swap = QPushButton("Swap")
         self.translate = QPushButton("Translate")
+        self.speakAfterTranslate = QCheckBox("Speak After Translate")
+        self.speakAfterTranslate.setChecked(True)
+        self.swap = QPushButton("Swap")
 
         self.destText = QPlainTextEdit("")
         self.destSpeak = QPushButton("Speak")
@@ -45,6 +48,8 @@ class MainWindow(QMainWindow):
         centralWidgetGridLayout.addWidget(self.destSpeak, 1, 2)
         centralWidgetGridLayout.addWidget(self.destLanguages, 2, 2)
 
+
+        centralWidgetGridLayout.addWidget(self.speakAfterTranslate, 1, 1)
         centralWidgetGridLayout.addWidget(self.swap, 2, 1)
 
         centralWidget.setLayout(centralWidgetGridLayout)
@@ -91,7 +96,8 @@ class MainWindow(QMainWindow):
                                              src=self.srcLanguages.itemData(self.srcLanguages.currentIndex()),
                                              dest=self.destLanguages.itemData(self.destLanguages.currentIndex()))
         self.destText.setPlainText(destText.text)
-        self.speak(self.destText.toPlainText(), self.destLanguages.itemData(self.destLanguages.currentIndex()))
+        if self.speakAfterTranslate.isChecked():
+            self.speak(self.destText.toPlainText(), self.destLanguages.itemData(self.destLanguages.currentIndex()))
 
 
 def main():
