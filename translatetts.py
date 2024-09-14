@@ -7,11 +7,9 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QP
 
 
 class MainWindow(QMainWindow):
-    COLUMN_HEADERS = ("Local Address", "Local Port", "Foreign Address", "Foreign Port", "State", "PID", "Actions")
-
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Translate and Say")
+        self.setWindowTitle("Translate and Speak")
         self.setGeometry(500, 100, 900, 400)
 
         self.srcText = QPlainTextEdit()
@@ -47,7 +45,6 @@ class MainWindow(QMainWindow):
         centralWidgetGridLayout.addWidget(self.destText, 0, 2)
         centralWidgetGridLayout.addWidget(self.destSpeak, 1, 2)
         centralWidgetGridLayout.addWidget(self.destLanguages, 2, 2)
-
 
         centralWidgetGridLayout.addWidget(self.speakAfterTranslate, 1, 1)
         centralWidgetGridLayout.addWidget(self.swap, 2, 1)
