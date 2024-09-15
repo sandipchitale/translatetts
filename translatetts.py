@@ -3,7 +3,7 @@ import sys
 import googletrans
 import pyttsx3
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
-                             QCheckBox)
+                             QCheckBox, QVBoxLayout)
 from pyttsx3.voice import Voice
 
 
@@ -17,16 +17,18 @@ class MainWindow(QMainWindow):
         self.setGeometry(500, 100, 900, 400)
 
         self.srcText = QPlainTextEdit()
-        self.srcText.setPlainText("My name is Translator.")
+        self.srcText.setPlainText("Let us translate and speak.")
         self.srcSpeak = QPushButton("Speak")
         self.srcLanguages = QComboBox()
 
-        self.translate = QPushButton("Translate")
+
+        self.translateLR = QPushButton("Translate >>")
+        self.translateRL = QPushButton("<< Translate ")
         self.speakAfterTranslate = QCheckBox("Speak After Translate")
         self.speakAfterTranslate.setChecked(True)
         self.swap = QPushButton("Swap")
 
-        self.destText = QPlainTextEdit("")
+        self.destText = QPlainTextEdit("Lassen Sie uns übersetzen und sprechen.")
         self.destSpeak = QPushButton("Speak")
         self.destLanguages = QComboBox()
 
@@ -47,7 +49,15 @@ class MainWindow(QMainWindow):
         centralWidgetGridLayout.addWidget(self.srcSpeak, 1, 0)
         centralWidgetGridLayout.addWidget(self.srcLanguages, 2, 0)
 
-        centralWidgetGridLayout.addWidget(self.translate, 0, 1)
+
+        middle = QWidget()
+        middleLayout = QVBoxLayout()
+        middle.setLayout(middleLayout)
+
+        middleLayout.addWidget(self.translateLR)
+        middleLayout.addWidget(self.translateRL)
+
+        centralWidgetGridLayout.addWidget(middle, 0, 1)
 
         centralWidgetGridLayout.addWidget(self.destText, 0, 2)
         centralWidgetGridLayout.addWidget(self.destSpeak, 1, 2)
@@ -79,7 +89,9 @@ class MainWindow(QMainWindow):
         # noinspection PyUnresolvedReferences
         self.swap.clicked.connect(self.swapSrcDest)
         # noinspection PyUnresolvedReferences
-        self.translate.clicked.connect(self.translateNow)
+        self.translateLR.clicked.connect(self.translateNowLR)
+        # noinspection PyUnresolvedReferences
+        self.translateRL.clicked.connect(self.translateNowRL)
 
         # noinspection PyUnresolvedReferences
         self.srcSpeak.clicked.connect(lambda: self.speak(self.srcText.toPlainText(),
@@ -108,17 +120,27 @@ class MainWindow(QMainWindow):
         self.srcVoices.setCurrentText(self.destVoices.currentText())
         self.destVoices.setCurrentText(srcCurrentVoice)
 
-    def translateNow(self):
-        srcText = self.srcText.toPlainText()
-        destText = self.translator.translate(srcText,
+    def translateNowLR(self):
+        fromText = self.srcText.toPlainText()
+        translatedText = self.translator.translate(fromText,
                                              src=self.srcLanguages.itemData(self.srcLanguages.currentIndex()),
                                              dest=self.destLanguages.itemData(self.destLanguages.currentIndex()))
-        self.destText.setPlainText(destText.text)
+        self.destText.setPlainText(translatedText.text)
         if self.speakAfterTranslate.isChecked():
             self.speak(self.destText.toPlainText(),
                        self.destLanguages.itemData(self.destLanguages.currentIndex()),
                        self.destVoices.itemData(self.destVoices.currentIndex()))
 
+    def translateNowRL(self):
+        fromText = self.destText.toPlainText()
+        translatedText = self.translator.translate(fromText,
+                                             src=self.destLanguages.itemData(self.destLanguages.currentIndex()),
+                                             dest=self.srcLanguages.itemData(self.srcLanguages.currentIndex()))
+        self.srcText.setPlainText(translatedText.text)
+        if self.speakAfterTranslate.isChecked():
+            self.speak(self.srcText.toPlainText(),
+                       self.srcLanguages.itemData(self.srcLanguages.currentIndex()),
+                       self.srcVoices.itemData(self.srcVoices.currentIndex()))
 def main():
     app = QApplication(sys.argv)
     window = MainWindow()
