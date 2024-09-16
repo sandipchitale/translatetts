@@ -2,6 +2,7 @@ import sys
 
 import googletrans
 import pyttsx3
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
                              QCheckBox, QVBoxLayout)
 from pyttsx3.voice import Voice
@@ -18,17 +19,29 @@ class MainWindow(QMainWindow):
 
         self.srcText = QPlainTextEdit()
         self.srcText.setPlainText("Let us translate and speak.")
-        self.srcSpeak = QPushButton("Speak")
+        self.srcSpeak = QPushButton("")
+        self.srcSpeak.setIcon(QIcon("icons/speak.png"))
+        self.srcSpeak.setToolTip("Speak")
         self.srcLanguages = QComboBox()
 
-        self.translateLR = QPushButton("Translate >>")
-        self.translateRL = QPushButton("<< Translate ")
+        self.translateLR = QPushButton("")
+        self.translateLR.setIcon(QIcon("icons/translatelr.png"))
+        self.translateLR.setToolTip("Translate (from left to right)")
+
+        self.translateRL = QPushButton("")
+        self.translateRL.setIcon(QIcon("icons/translaterl.png"))
+        self.translateRL.setToolTip("Translate (from right to left)")
+
         self.speakAfterTranslate = QCheckBox("Speak After Translate")
         self.speakAfterTranslate.setChecked(False)
-        self.swap = QPushButton("Swap")
+        self.swap = QPushButton("")
+        self.swap.setIcon(QIcon("icons/swap.png"))
+        self.swap.setToolTip("Swap")
 
         self.destText = QPlainTextEdit("Lassen Sie uns übersetzen und sprechen.")
-        self.destSpeak = QPushButton("Speak")
+        self.destSpeak = QPushButton("")
+        self.destSpeak.setIcon(QIcon("icons/speak.png"))
+        self.destSpeak.setToolTip("Speak")
         self.destLanguages = QComboBox()
 
         self.srcVoices = QComboBox()
@@ -113,7 +126,7 @@ class MainWindow(QMainWindow):
                                                               self.destLanguages.currentIndex()),
                                                           self.destVoices.itemData(self.destVoices.currentIndex())))
 
-    def speak(self, text: str, lang: str, voice: Voice):
+    def speak(self, text: str, lang: str, voice: Voice, afterTranslate = False):
         self.engine.setProperty("voice", voice.id)
         self.engine.say(text)
         self.engine.runAndWait()
