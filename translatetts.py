@@ -5,7 +5,8 @@ import pyttsx3
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
-                             QCheckBox, QVBoxLayout)
+                             QCheckBox, QVBoxLayout, QMessageBox, QErrorMessage)
+from httpcore import ConnectError
 from pyttsx3.voice import Voice
 
 class MainWindow(QMainWindow):
@@ -137,30 +138,33 @@ class MainWindow(QMainWindow):
         self.engine.say(text)
         self.engine.runAndWait()
 
-    def swapSrcDest(self):
-        srcPlainText = self.srcText.toPlainText()
-        self.srcText.setPlainText(self.destText.toPlainText())
-        self.destText.setPlainText(srcPlainText)
-
-        srcCurrentText = self.srcLanguages.currentText()
-        self.srcLanguages.setCurrentText(self.destLanguages.currentText())
-        self.destLanguages.setCurrentText(srcCurrentText)
-
-        srcCurrentVoice = self.srcVoices.currentText()
-        self.srcVoices.setCurrentText(self.destVoices.currentText())
-        self.destVoices.setCurrentText(srcCurrentVoice)
+    # def swapSrcDest(self):
+    #     srcPlainText = self.srcText.toPlainText()
+    #     self.srcText.setPlainText(self.destText.toPlainText())
+    #     self.destText.setPlainText(srcPlainText)
+    #
+    #     srcCurrentText = self.srcLanguages.currentText()
+    #     self.srcLanguages.setCurrentText(self.destLanguages.currentText())
+    #     self.destLanguages.setCurrentText(srcCurrentText)
+    #
+    #     srcCurrentVoice = self.srcVoices.currentText()
+    #     self.srcVoices.setCurrentText(self.destVoices.currentText())
+    #     self.destVoices.setCurrentText(srcCurrentVoice)
 
     def translateNow(self, srcText, srcLanguages, srcVoices, destText, destLanguages, destVoices):
-        textToTranslate = srcText.toPlainText()
-        translatedText = self.translator.translate(textToTranslate,
-                                                   src=srcLanguages.itemData(srcLanguages.currentIndex()),
-                                                   dest=destLanguages.itemData(destLanguages.currentIndex()))
-        destText.setPlainText(translatedText.text)
-        # if self.speakAfterTranslate.isChecked():
-        self.speak(destText.toPlainText(),
-                   destLanguages.itemData(destLanguages.currentIndex()),
-                   destVoices.itemData(destVoices.currentIndex()))
-
+        try:
+            textToTranslate = srcText.toPlainText()
+            translatedText = self.translator.translate(textToTranslate,
+                                                       src=srcLanguages.itemData(srcLanguages.currentIndex()),
+                                                       dest=destLanguages.itemData(destLanguages.currentIndex()))
+            destText.setPlainText(translatedText.text)
+            # if self.speakAfterTranslate.isChecked():
+            self.speak(destText.toPlainText(),
+                       destLanguages.itemData(destLanguages.currentIndex()),
+                       destVoices.itemData(destVoices.currentIndex()))
+        except ConnectError as ce:
+            errorMessage = QErrorMessage()
+            errorMessage.showMessage("No internet connection!<br/>Internet connection is needed for translation.<br/>Try again later once you are online.")
 
 def main():
     app = QApplication(sys.argv)
