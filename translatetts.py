@@ -164,7 +164,7 @@ class MainWindow(QMainWindow):
                        destVoices.itemData(destVoices.currentIndex()))
         except ConnectError as ce:
             errorMessage = QErrorMessage()
-            errorMessage.showMessage("No internet connection!<br/>Internet connection is needed for translation.<br/>Try again later once you are online.")
+            errorMessage.showMessage("No internet connection! Internet connection is needed for translation.<br/><br/>Try again later once you are online.")
 
 def main():
     app = QApplication(sys.argv)
