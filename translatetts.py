@@ -65,8 +65,10 @@ class MainWindow(QMainWindow):
         middleLayout = QVBoxLayout()
         middle.setLayout(middleLayout)
 
+        middleLayout.addStretch()
         middleLayout.addWidget(self.translateLR)
         middleLayout.addWidget(self.translateRL)
+        middleLayout.addStretch()
 
         centralWidgetGridLayout.addWidget(middle, 0, 1)
 
