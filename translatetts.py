@@ -2,6 +2,7 @@ import sys
 
 import googletrans
 import pyttsx3
+from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
                              QCheckBox, QVBoxLayout)
@@ -26,11 +27,13 @@ class MainWindow(QMainWindow):
 
         self.translateLR = QPushButton("")
         self.translateLR.setIcon(QIcon("icons/translatelr.png"))
+        self.translateLR.setIconSize(QSize(48, 48))
         self.translateLR.setToolTip("Translate (from left to right)")
 
         self.translateRL = QPushButton("")
         self.translateRL.setIcon(QIcon("icons/translaterl.png"))
         self.translateRL.setToolTip("Translate (from right to left)")
+        self.translateRL.setIconSize(QSize(48,48))
 
         self.speakAfterTranslate = QCheckBox("Speak After Translate")
         self.speakAfterTranslate.setChecked(False)
