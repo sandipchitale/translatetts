@@ -17,41 +17,41 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Translate and Speak")
         self.setGeometry(500, 100, 900, 400)
 
-        self.srcText = QPlainTextEdit()
-        self.srcText.setPlainText("Let us translate and speak.")
-
-        self.srcSpeak = QPushButton("")
-        self.srcSpeak.setIcon(QIcon("icons/speak.png"))
-        self.srcSpeak.setIconSize(QSize(32, 32))
-        self.srcSpeak.setToolTip("Speak")
-
-        self.srcLanguages = QComboBox()
-
         self.translateLR = QPushButton("")
         self.translateLR.setIcon(QIcon("icons/translatelr.png"))
         self.translateLR.setToolTip("Translate (from left to right)")
         self.translateLR.setIconSize(QSize(32, 32))
+
+        # self.swap = QPushButton("")
+        # self.swap.setIcon(QIcon("icons/swap.png"))
+        # self.swap.setToolTip("Swap")
+        # self.swap.setIconSize(QSize(32,32))
 
         self.translateRL = QPushButton("")
         self.translateRL.setIcon(QIcon("icons/translaterl.png"))
         self.translateRL.setToolTip("Translate (from right to left)")
         self.translateRL.setIconSize(QSize(32, 32))
 
-        self.speakAfterTranslate = QCheckBox("Speak After Translate")
-        self.speakAfterTranslate.setChecked(True)
-
-        self.swap = QPushButton("")
-        self.swap.setIcon(QIcon("icons/swap.png"))
-        self.swap.setToolTip("Swap")
-        self.swap.setIconSize(QSize(32,32))
-
+        self.srcText = QPlainTextEdit("Let us translate and speak.")
         self.destText = QPlainTextEdit("Lassen Sie uns übersetzen und sprechen.")
+
+        self.srcSpeak = QPushButton("")
+        self.srcSpeak.setIcon(QIcon("icons/speak.png"))
+        self.srcSpeak.setIconSize(QSize(32, 32))
+        self.srcSpeak.setToolTip("Speak")
+
+        # self.speakAfterTranslate = QCheckBox("")
+        # self.translateRL.setToolTip("Speak after translation")
+        # self.speakAfterTranslate.setChecked(True)
+        # self.speakAfterTranslate.setIcon(QIcon("icons/speakaftertranslate.png"))
+        # self.speakAfterTranslate.setIconSize(QSize(64, 32))
 
         self.destSpeak = QPushButton("")
         self.destSpeak.setIcon(QIcon("icons/speak.png"))
         self.destSpeak.setToolTip("Speak")
         self.destSpeak.setIconSize(QSize(32, 32))
 
+        self.srcLanguages = QComboBox()
         self.destLanguages = QComboBox()
 
         self.srcVoices = QComboBox()
@@ -67,34 +67,19 @@ class MainWindow(QMainWindow):
 
         centralWidgetGridLayout = QGridLayout()
 
-        centralWidgetGridLayout.addWidget(self.srcText, 0, 0)
-        centralWidgetGridLayout.addWidget(self.srcLanguages, 1, 0)
+        centralWidgetGridLayout.addWidget(self.translateLR, 0, 0)
+        # centralWidgetGridLayout.addWidget(self.speakAfterTranslate, 0, 1)
+        centralWidgetGridLayout.addWidget(self.translateRL, 0, 2)
 
-        middle = QWidget()
-        middleLayout = QVBoxLayout()
-        middle.setLayout(middleLayout)
+        centralWidgetGridLayout.addWidget(self.srcText, 1, 0)
+        centralWidgetGridLayout.addWidget(self.destText, 1, 2)
 
-        middleLayout.addStretch()
-        middleLayout.addWidget(self.translateLR)
-        middleLayout.addWidget(self.translateRL)
-        middleLayout.addStretch()
-        middleLayout.addWidget(self.speakAfterTranslate)
-        middleLayout.addWidget(self.swap)
+        centralWidgetGridLayout.addWidget(self.srcSpeak, 2, 0)
+        # centralWidgetGridLayout.addWidget(self.swap, 2, 1)
+        centralWidgetGridLayout.addWidget(self.destSpeak, 2, 2)
 
-        centralWidgetGridLayout.addWidget(middle, 0, 1)
-
-        centralWidgetGridLayout.addWidget(self.destText, 0, 2)
-        centralWidgetGridLayout.addWidget(self.destLanguages, 1, 2)
-        #
-        # centralWidgetGridLayout.addWidget(self.speakAfterTranslate, 3, 1)
-        # centralWidgetGridLayout.setAlignment(self.speakAfterTranslate,
-        #                                      Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-
-        # centralWidgetGridLayout.addWidget(self.swap, 1, 1, 2, 1)
-        # self.swap.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-        centralWidgetGridLayout.addWidget(self.srcSpeak, 3, 0)
-        centralWidgetGridLayout.addWidget(self.destSpeak, 3, 2)
+        centralWidgetGridLayout.addWidget(self.srcLanguages, 3, 0)
+        centralWidgetGridLayout.addWidget(self.destLanguages, 3, 2)
 
         # noinspection PyTypeChecker
         voices = tuple(self.engine.getProperty('voices'))
@@ -103,8 +88,9 @@ class MainWindow(QMainWindow):
             self.destVoices.addItem(voice.name, voice)
         self.srcVoices.setCurrentText("English (America)")
         self.destVoices.setCurrentText("German")
-        centralWidgetGridLayout.addWidget(self.srcVoices, 2, 0)
-        centralWidgetGridLayout.addWidget(self.destVoices, 2, 2)
+
+        centralWidgetGridLayout.addWidget(self.srcVoices, 4, 0)
+        centralWidgetGridLayout.addWidget(self.destVoices, 4, 2)
 
         centralWidget.setLayout(centralWidgetGridLayout)
 
@@ -118,7 +104,8 @@ class MainWindow(QMainWindow):
         self.destLanguages.setCurrentText("german")
 
         # noinspection PyUnresolvedReferences
-        self.swap.clicked.connect(self.swapSrcDest)
+        # self.swap.clicked.connect(self.swapSrcDest
+
         # noinspection PyUnresolvedReferences
         self.translateLR.clicked.connect(lambda: self.translateNow(self.srcText,
                                                                    self.srcLanguages,
@@ -169,10 +156,10 @@ class MainWindow(QMainWindow):
                                                    src=srcLanguages.itemData(srcLanguages.currentIndex()),
                                                    dest=destLanguages.itemData(destLanguages.currentIndex()))
         destText.setPlainText(translatedText.text)
-        if self.speakAfterTranslate.isChecked():
-            self.speak(destText.toPlainText(),
-                       destLanguages.itemData(destLanguages.currentIndex()),
-                       destVoices.itemData(destVoices.currentIndex()))
+        # if self.speakAfterTranslate.isChecked():
+        self.speak(destText.toPlainText(),
+                   destLanguages.itemData(destLanguages.currentIndex()),
+                   destVoices.itemData(destVoices.currentIndex()))
 
 
 def main():
