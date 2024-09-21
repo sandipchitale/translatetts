@@ -5,9 +5,10 @@ import pyttsx3
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
-                             QCheckBox, QVBoxLayout, QMessageBox, QErrorMessage)
+                             QErrorMessage, QSizePolicy)
 from httpcore import ConnectError
 from pyttsx3.voice import Voice
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
         self.destText = QPlainTextEdit("Lassen Sie uns übersetzen und sprechen.")
 
         self.srcSpeak = QPushButton("")
-        self.srcSpeak.setIcon(QIcon("icons/speak.png"))
+        self.srcSpeak.setIcon(QIcon("icons/speakl.png"))
         self.srcSpeak.setIconSize(QSize(32, 32))
         self.srcSpeak.setToolTip("Speak")
 
@@ -48,7 +49,7 @@ class MainWindow(QMainWindow):
         # self.speakAfterTranslate.setIconSize(QSize(64, 32))
 
         self.destSpeak = QPushButton("")
-        self.destSpeak.setIcon(QIcon("icons/speak.png"))
+        self.destSpeak.setIcon(QIcon("icons/speakr.png"))
         self.destSpeak.setToolTip("Speak")
         self.destSpeak.setIconSize(QSize(32, 32))
 
@@ -68,19 +69,18 @@ class MainWindow(QMainWindow):
 
         centralWidgetGridLayout = QGridLayout()
 
-        centralWidgetGridLayout.addWidget(self.translateLR, 0, 0)
-        # centralWidgetGridLayout.addWidget(self.speakAfterTranslate, 0, 1)
-        centralWidgetGridLayout.addWidget(self.translateRL, 0, 2)
+        centralWidgetGridLayout.addWidget(self.srcText, 0, 0, 1, 2)
+        centralWidgetGridLayout.addWidget(self.destText, 0, 2, 1, 2)
 
-        centralWidgetGridLayout.addWidget(self.srcText, 1, 0)
-        centralWidgetGridLayout.addWidget(self.destText, 1, 2)
+        self.srcLanguages.setStyleSheet("height: 32px;")
+        centralWidgetGridLayout.addWidget(self.srcLanguages, 1, 0)
+        self.translateLR.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.translateLR, 1, 1)
 
-        centralWidgetGridLayout.addWidget(self.srcSpeak, 2, 0)
-        # centralWidgetGridLayout.addWidget(self.swap, 2, 1)
-        centralWidgetGridLayout.addWidget(self.destSpeak, 2, 2)
-
-        centralWidgetGridLayout.addWidget(self.srcLanguages, 3, 0)
-        centralWidgetGridLayout.addWidget(self.destLanguages, 3, 2)
+        self.translateRL.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.translateRL, 1, 2)
+        self.destLanguages.setStyleSheet("height: 32px;")
+        centralWidgetGridLayout.addWidget(self.destLanguages, 1, 3)
 
         # noinspection PyTypeChecker
         voices = tuple(self.engine.getProperty('voices'))
@@ -90,8 +90,15 @@ class MainWindow(QMainWindow):
         self.srcVoices.setCurrentText("English (America)")
         self.destVoices.setCurrentText("German")
 
-        centralWidgetGridLayout.addWidget(self.srcVoices, 4, 0)
-        centralWidgetGridLayout.addWidget(self.destVoices, 4, 2)
+        self.srcVoices.setStyleSheet("height: 32px;")
+        centralWidgetGridLayout.addWidget(self.srcVoices, 2, 0)
+        self.srcSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.srcSpeak, 2, 1)
+
+        self.destSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.destSpeak, 2, 2)
+        self.destVoices.setStyleSheet("height: 32px;")
+        centralWidgetGridLayout.addWidget(self.destVoices, 2, 3)
 
         centralWidget.setLayout(centralWidgetGridLayout)
 
@@ -133,7 +140,7 @@ class MainWindow(QMainWindow):
                                                               self.destLanguages.currentIndex()),
                                                           self.destVoices.itemData(self.destVoices.currentIndex())))
 
-    def speak(self, text: str, lang: str, voice: Voice, afterTranslate = False):
+    def speak(self, text: str, lang: str, voice: Voice, afterTranslate=False):
         self.engine.setProperty("voice", voice.id)
         self.engine.say(text)
         self.engine.runAndWait()
@@ -164,7 +171,9 @@ class MainWindow(QMainWindow):
                        destVoices.itemData(destVoices.currentIndex()))
         except ConnectError as ce:
             errorMessage = QErrorMessage()
-            errorMessage.showMessage("No internet connection! Internet connection is needed for translation.<br/><br/>Try again later once you are online.")
+            errorMessage.showMessage(
+                "No internet connection! Internet connection is needed for translation.<br/><br/>Try again later once you are online.")
+
 
 def main():
     app = QApplication(sys.argv)
