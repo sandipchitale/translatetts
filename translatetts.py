@@ -69,18 +69,21 @@ class MainWindow(QMainWindow):
 
         centralWidgetGridLayout = QGridLayout()
 
-        centralWidgetGridLayout.addWidget(self.srcText, 0, 0, 1, 2)
-        centralWidgetGridLayout.addWidget(self.destText, 0, 2, 1, 2)
+        # self.srcLanguages.setStyleSheet("height: 32px;")
+        centralWidgetGridLayout.addWidget(self.srcLanguages, 0, 0, 1, 2)
 
-        self.srcLanguages.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.srcLanguages, 1, 0)
-        self.translateLR.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.translateLR, 1, 1)
+        # self.destLanguages.setStyleSheet("height: 32px;")
+        centralWidgetGridLayout.addWidget(self.destLanguages, 0, 2, 1, 2)
 
-        self.translateRL.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.translateRL, 1, 2)
-        self.destLanguages.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.destLanguages, 1, 3)
+        centralWidgetGridLayout.addWidget(self.srcText, 1, 0, 1, 2)
+        centralWidgetGridLayout.addWidget(self.destText, 1, 2, 1, 2)
+
+        # self.translateLR.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.translateLR, 2, 0, 1, 2)
+
+        # self.translateRL.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.translateRL, 2, 2, 1, 2)
+
 
         # noinspection PyTypeChecker
         voices = tuple(self.engine.getProperty('voices'))
@@ -91,14 +94,15 @@ class MainWindow(QMainWindow):
         self.destVoices.setCurrentText("German")
 
         self.srcVoices.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.srcVoices, 2, 0)
+        centralWidgetGridLayout.addWidget(self.srcVoices, 3, 0)
         self.srcSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.srcSpeak, 2, 1)
+        centralWidgetGridLayout.addWidget(self.srcSpeak, 3, 1)
 
-        self.destSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.destSpeak, 2, 2)
         self.destVoices.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.destVoices, 2, 3)
+        centralWidgetGridLayout.addWidget(self.destVoices, 3, 2)
+        self.destSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.destSpeak, 3, 3)
+
 
         centralWidget.setLayout(centralWidgetGridLayout)
 
