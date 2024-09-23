@@ -24,11 +24,6 @@ class MainWindow(QMainWindow):
         self.translateLR.setToolTip("Translate (from left to right)")
         self.translateLR.setIconSize(QSize(32, 32))
 
-        # self.swap = QPushButton("")
-        # self.swap.setIcon(QIcon("icons/swap.png"))
-        # self.swap.setToolTip("Swap")
-        # self.swap.setIconSize(QSize(32,32))
-
         self.translateRL = QPushButton("")
         self.translateRL.setIcon(QIcon("icons/translaterl.png"))
         self.translateRL.setToolTip("Translate (from right to left)")
@@ -41,12 +36,6 @@ class MainWindow(QMainWindow):
         self.srcSpeak.setIcon(QIcon("icons/speakl.png"))
         self.srcSpeak.setIconSize(QSize(32, 32))
         self.srcSpeak.setToolTip("Speak")
-
-        # self.speakAfterTranslate = QCheckBox("")
-        # self.translateRL.setToolTip("Speak after translation")
-        # self.speakAfterTranslate.setChecked(True)
-        # self.speakAfterTranslate.setIcon(QIcon("icons/speakaftertranslate.png"))
-        # self.speakAfterTranslate.setIconSize(QSize(64, 32))
 
         self.destSpeak = QPushButton("")
         self.destSpeak.setIcon(QIcon("icons/speakr.png"))
