@@ -5,7 +5,7 @@ import pyttsx3
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QPlainTextEdit, QPushButton, QComboBox,
-                             QErrorMessage, QSizePolicy)
+                             QErrorMessage, QSizePolicy, QLabel)
 from httpcore import ConnectError
 from pyttsx3.voice import Voice
 
@@ -69,21 +69,26 @@ class MainWindow(QMainWindow):
 
         centralWidgetGridLayout = QGridLayout()
 
-        # self.srcLanguages.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.srcLanguages, 0, 0, 1, 2)
+        srcLanguageLabel = QLabel("From:")
+        srcLanguageLabel.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(srcLanguageLabel, 0, 0)
+        self.srcLanguages.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.srcLanguages, 0, 1, 1, 3)
 
-        # self.destLanguages.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.destLanguages, 0, 2, 1, 2)
+        destLanguagesLabel = QLabel("To:")
+        destLanguagesLabel.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(destLanguagesLabel, 0, 4)
+        self.destLanguages.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.destLanguages, 0, 5, 1, 3)
 
-        centralWidgetGridLayout.addWidget(self.srcText, 1, 0, 1, 2)
-        centralWidgetGridLayout.addWidget(self.destText, 1, 2, 1, 2)
+        centralWidgetGridLayout.addWidget(self.srcText, 1, 0, 1, 4)
+        centralWidgetGridLayout.addWidget(self.destText, 1, 4, 1, 4)
 
         # self.translateLR.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.translateLR, 2, 0, 1, 2)
+        centralWidgetGridLayout.addWidget(self.translateLR, 2, 0, 1, 4)
 
         # self.translateRL.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.translateRL, 2, 2, 1, 2)
-
+        centralWidgetGridLayout.addWidget(self.translateRL, 2, 4, 1, 4)
 
         # noinspection PyTypeChecker
         voices = tuple(self.engine.getProperty('voices'))
@@ -93,27 +98,40 @@ class MainWindow(QMainWindow):
         self.srcVoices.setCurrentText("English (America)")
         self.destVoices.setCurrentText("German")
 
-        self.srcVoices.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.srcVoices, 3, 0)
         self.srcSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.srcSpeak, 3, 1)
+        centralWidgetGridLayout.addWidget(self.srcSpeak, 3, 0)
+        srcInLabel = QLabel("in")
+        srcInLabel.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(srcInLabel, 3, 1)
+        self.srcVoices.setStyleSheet("height: 32px;")
+        self.srcVoices.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.srcVoices, 3, 2)
+        srcVoiceLabel = QLabel("voice.")
+        srcVoiceLabel.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(srcVoiceLabel, 3, 3)
 
-        self.destVoices.setStyleSheet("height: 32px;")
-        centralWidgetGridLayout.addWidget(self.destVoices, 3, 2)
         self.destSpeak.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        centralWidgetGridLayout.addWidget(self.destSpeak, 3, 3)
-
+        centralWidgetGridLayout.addWidget(self.destSpeak, 3, 4)
+        destInLabel = QLabel("in")
+        destInLabel.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(destInLabel, 3, 5)
+        self.destVoices.setStyleSheet("height: 32px;")
+        self.destVoices.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(self.destVoices, 3, 6)
+        destVoiceLabel = QLabel("voice.")
+        destVoiceLabel.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        centralWidgetGridLayout.addWidget(destVoiceLabel, 3, 7)
 
         centralWidget.setLayout(centralWidgetGridLayout)
 
         languages = googletrans.LANGUAGES
 
         for language in languages:
-            self.srcLanguages.addItem(languages[language], language)
-            self.destLanguages.addItem(languages[language], language)
+            self.srcLanguages.addItem(languages[language].capitalize(), language)
+            self.destLanguages.addItem(languages[language].capitalize(), language)
 
-        self.srcLanguages.setCurrentText("english")
-        self.destLanguages.setCurrentText("german")
+        self.srcLanguages.setCurrentText("English")
+        self.destLanguages.setCurrentText("German")
 
         # noinspection PyUnresolvedReferences
         # self.swap.clicked.connect(self.swapSrcDest
