@@ -123,9 +123,6 @@ class MainWindow(QMainWindow):
         self.destLanguages.setCurrentText("German")
 
         # noinspection PyUnresolvedReferences
-        # self.swap.clicked.connect(self.swapSrcDest
-
-        # noinspection PyUnresolvedReferences
         self.translateLR.clicked.connect(lambda: self.translateNow(self.srcText,
                                                                    self.srcLanguages,
                                                                    self.srcVoices,
@@ -155,19 +152,6 @@ class MainWindow(QMainWindow):
         self.engine.setProperty("voice", voice.id)
         self.engine.say(text)
         self.engine.runAndWait()
-
-    # def swapSrcDest(self):
-    #     srcPlainText = self.srcText.toPlainText()
-    #     self.srcText.setPlainText(self.destText.toPlainText())
-    #     self.destText.setPlainText(srcPlainText)
-    #
-    #     srcCurrentText = self.srcLanguages.currentText()
-    #     self.srcLanguages.setCurrentText(self.destLanguages.currentText())
-    #     self.destLanguages.setCurrentText(srcCurrentText)
-    #
-    #     srcCurrentVoice = self.srcVoices.currentText()
-    #     self.srcVoices.setCurrentText(self.destVoices.currentText())
-    #     self.destVoices.setCurrentText(srcCurrentVoice)
 
     def translateNow(self, srcText, srcLanguages, srcVoices, destText, destLanguages, destVoices):
         try:
